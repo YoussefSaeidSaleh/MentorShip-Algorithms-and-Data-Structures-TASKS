@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fast Product Search Interface for E-Commerce</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      header {
+        background-color: #007bff;
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
+      main {
+        display: flex;
+      }
+      .search-products {
+        padding: 20px;
+        margin: 0;
+        margin-right: 10px;
+        text-align: center;
+        width: 70%;
+      }
+      .search input {
+        padding: 10px;
+        width: 60%;
+        margin: 10px 0;
+      }
+      .search button {
+        padding: 10px;
+        cursor: pointer;
+      }
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      ul li {
+        list-style: none;
+        padding: 10px;
+        border: 1px solid black;
+      }
+      .results-area {
+        margin-top: 20px;
+        margin-right: 10px;
+        text-align: center;
+        width: 30%;
+      }
+      /* highlight colors for binary steps */
+      .li-left {
+        background: pink;
+      }
+      .li-right {
+        background: #4da3ff;
+      } /* blue */
+      .li-mid {
+        background: #ff4d4d;
+      } /* red */
+      .li-found {
+        background: #43d854;
+      } /* green */
+
+      /* optional: make text readable on colors */
+      ul li {
+        transition: background 0.2s ease;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>Product Search</h1>
+    </header>
+    <main>
+      <!-- Product Search Section -->
+      <div class="search-products">
+        <div class="search">
+          <!-- Search Input Field -->
+          <input
+            type="text"
+            id="searchInput"
+            placeholder="Search for a product..."
+          />
+          <button onclick="performLinearSearch()">Search L</button>
+          <button onclick="performBinarySearch()">Search B</button>
+        </div>
+        <div class="products">
+          <ul class="product-list"></ul>
+        </div>
+      </div>
+      <div class="results-area"></div>
+    </main>
+  </body>
+  <script>
+    const products = [
+      "Apple iPhone 12",
+      "Apple iPhone 11",
+      "Apple iPhone SE",
+      "Apple iPhone XR",
+      "Samsung Galaxy S21",
+      "Samsung Galaxy S20",
+      "Samsung Galaxy Note 20",
+      "Samsung Galaxy A72",
+      "Samsung Galaxy Z Fold 3",
+      "Google Pixel 6",
+      "Google Pixel 5",
+      "Google Pixel 4a",
+      "Google Pixel 4",
+      "Google Pixel 3a",
+      "OnePlus 9 Pro",
+      "OnePlus 9",
+      "OnePlus 8T",
+      "OnePlus Nord",
+      "OnePlus 8 Pro",
+      "Huawei P40 Pro",
+      "Huawei P40",
+      "Huawei Mate 40 Pro",
+      "Huawei Mate 30 Pro",
+      "Huawei Y9a",
+      "Xiaomi Mi 11",
+      "Xiaomi Mi 10",
+      "Xiaomi Mi 9",
+      "Xiaomi Redmi Note 10",
+      "Xiaomi Redmi Note 9 Pro",
+      "Sony Xperia 1 II",
+      "Sony Xperia 5 II",
+      "Sony Xperia 10 II",
+      "Sony Xperia XZ3",
+      "Sony Xperia XA2",
+      "Oppo Find X3 Pro",
+      "Oppo Reno 5",
+      "Oppo A94",
+      "Oppo A74",
+      "Oppo F19 Pro",
+      "Realme GT",
+      "Realme X50 Pro",
+      "Realme Narzo 30 Pro",
+      "Realme 7 Pro",
+      "Realme 8",
+      "Asus ROG Phone 5",
+      "Asus Zenfone 8",
+      "Asus Zenfone 7 Pro",
+      "Asus Zenfone 6",
+      "Asus Zenfone Max Pro M2",
+      "Motorola Edge+",
+    ];
+
+    products.sort();
+
+    const productList = document.querySelector(".product-list");
+    itemCount = 0;
+    const liItems = [];
+
+    products.forEach((product) => {
+      itemCount++;
+      const li = document.createElement("li");
+      li.textContent = `${itemCount} - ${product}`;
+      productList.appendChild(li);
+      liItems.push(li);
+    });
+
+    //Linear Search
+    let linearComparisons = 0;
+
+    function linearSearch(target) {
+      linearComparisons = 0;
+      for (let i = 0; i < products.length; i++) {
+        linearComparisons++;
+        if (products[i].toLowerCase() === target.toLowerCase()) {
+          return i;
+        }
+      }
+      return -1;
+    }
+
+    //Binary Search
+    let binaryComparisons = 0;
+
+    function binarySearch(target) {
+      binaryComparisons = 0;
+      let left = 0;
+      let right = products.length - 1;
+
+      while (left <= right) {
+        binaryComparisons++;
+        let mid = Math.floor((left + right) / 2);
+
+        if (products[mid].toLowerCase() === target.toLowerCase()) {
+          return mid;
+        } else if (products[mid].toLowerCase() < target.toLowerCase()) {
+          left = mid + 1;
+        } else {
+          right = mid - 1;
+        }
+      }
+      return -1;
+    }
+
+    // Perform Search for Linear Search
+    function performLinearSearch() {
+      const target = document.getElementById("searchInput").value;
+      if (target === "") {
+        alert("Please enter a product name!");
+        return;
+      }
+
+      const linearResult = linearSearch(target);
+      displayResults(linearResult, -1);
+    }
+
+    // Perform Search for Binary Search
+    function performBinarySearch() {
+      const target = document.getElementById("searchInput").value;
+      if (target === "") {
+        alert("Please enter a product name!");
+        return;
+      }
+
+      const binaryResult = binarySearch(target);
+      displayResults(-1, binaryResult);
+    }
+
+    // displayResults
+    function displayResults(linearResult, binaryResult) {
+      const resultsArea = document.querySelector(".results-area");
+
+      // Initialize messages
+      let linearMessage = "";
+      let binaryMessage = "";
+
+      // Linear search result message
+      if (linearResult !== null) {
+        if (linearResult === -1) {
+          linearMessage = "Product not found in linear search!";
+        } else {
+          linearMessage = `Product found in item ${
+            linearResult + 1
+          } in Linear Search. Comparisons: ${linearComparisons}`;
+        }
+      }
+
+      // Binary search result message
+      if (binaryResult !== null) {
+        if (binaryResult === -1) {
+          binaryMessage = "Product not found in binary search!";
+        } else {
+          binaryMessage = `Product found in item ${
+            binaryResult + 1
+          } in Binary Search. Comparisons: ${binaryComparisons}`;
+        }
+      }
+
+      // Display the appropriate message
+      resultsArea.innerHTML = `
+    <p>${linearResult !== null ? linearMessage : ""}</p>
+    <p>${binaryResult !== null ? binaryMessage : ""}</p>
+    <div>
+      <h3>Comparisons</h3>
+      <div style="width:${
+        linearComparisons * 2
+      }%; height: 20px; background-color: blue; margin-bottom: 10px;"></div>
+      <div style="width:${
+        binaryComparisons * 10
+      }%; height: 20px; background-color: green;"></div>
+    </div>
+  `;
+    }
+  </script>
+</html>
