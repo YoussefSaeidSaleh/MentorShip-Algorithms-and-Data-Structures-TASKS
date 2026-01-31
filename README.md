@@ -1,3 +1,4 @@
+index.htlml 
 TASK 1
 
 Fast Product Search Interface
@@ -31,5 +32,37 @@ All code (HTML, CSS, JS) must be in a single HTML file.
 Use Array.sort() in JS to keep your data sorted.
 Use colored backgrounds, text, or borders to indicate which items are
 checked in each search step.
-Comparison chart can be built by changing the width of divs, or using
-the HTML5
+Comparison chart can be built by changing the width of divs, or using the HTML5
+
+##################################################################################################
+
+warehouse-inventory.html 
+TASK 2
+
+Warehouse Inventory List Manager
+Scenario: You9ve been hired to create a product inventory system for a local
+warehouse. They need to add and remove items, monitor their stock, and
+undo/redo mistakes quickly.
+Assignment: Make a single HTML file that provides these features:
+Inventory Management UI:
+An input form to add new products (name, quantity).
+A visible list showing current inventory (each item as a box or card).
+Linked List Implementation:
+Store product items in a custom doubly linked list class written in
+JavaScript (not just an array).
+Each product node should include links to <previous= and <next=
+items, shown visually with arrows.
+Undo/Redo Functionality:
+Let the user undo or redo their last change (use stacks/arrays to
+track history).
+Buttons for <Undo= and <Redo=.
+Inventory Stats & Actions:
+Show total items and the most recently changed item.
+Allow editing and removal of any product node.
+Bonus:
+Visual comparison of the list vs array operations (e.g., show how
+many steps to add/remove in each structure).
+Hints:
+Update the DOM with every add, edit, remove, undo, or redo.
+For visual arrows, use Unicode characters, SVG, or simple CSS.
+All code (HTML, CSS, JS) must be in a single HTML file no frameworks!
